@@ -10,14 +10,22 @@
 
         parseId = function(url) {
             let id = "";
+            let reg = "";
+            let result = [];
 
             // folders - https://drive.google.com/drive/u/0/folders/
-            var reg = /\/(folders|files)\/(.+)\/?/;
-            let result = url.match(reg);
+            reg = /\/(folders|files)\/(.+)\/?/;
+            result = url.match(reg);
             if (result && result.length > 2) {
                 id = result[2];
             }
 
+            // id - https://drive.google.com/open?id=1_1ElibMCvJEUB6_kXuI1fj_jh15uNAiB
+            reg = /\/id=(.+)[^0-9A-Za-z_]?/;
+            result = url.match(reg);
+            if (result && result.length > 2) {
+                id = result[2];
+            }
             return id;
         }
 
@@ -28,7 +36,8 @@
                 return;
             }
 
-            let urlList = $(urls).val().trim().split("\n");
+            console.log(urls)
+            let urlList = urls.split("\n");
             let remote = $("#remote").val().trim();
             let folder = $("#folder").val().trim();
 
