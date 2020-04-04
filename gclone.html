@@ -20,11 +20,12 @@
                 id = result[2];
             }
 
-            // id - https://drive.google.com/open?id=1_1ElibMCvJEUB6_kXuI1fj_jh15uNAiB
-            reg = /\/id=(.+)[^0-9A-Za-z_]?/;
+            // id - https://drive.google.com/open?id=
+            reg = /.+id=(.+)[^0-9A-Za-z_]?/;
             result = url.match(reg);
-            if (result && result.length > 2) {
-                id = result[2];
+            console.log(result);
+            if (result && result.length > 1) {
+                id = result[1];
             }
             return id;
         }
@@ -60,6 +61,8 @@
         }
 
         $("#input-urls").bind('input propertychange', convert)
+        $("#host").bind('input propertychange', convert)
+        $("#folder").bind('input propertychange', convert)
 
         convert();
     });
