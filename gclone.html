@@ -1,0 +1,90 @@
+<html>
+
+<head>
+    <title>Drive URLs to GClone</title>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.1/pure-min.css" crossorigin="anonymous">
+</head>
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        parseId = function(url) {
+            let id = "";
+
+            // folders - https://drive.google.com/drive/u/0/folders/
+            var reg = /\/(folders|files)\/(.+)\/?/;
+            let result = url.match(reg);
+            if (result && result.length > 2) {
+                id = result[2];
+            }
+
+            return id;
+        }
+
+        convert = function() {
+            let urls = $("#input-urls").val().trim();
+            if (urls.length == 0) {
+                $("#output-cmds").val("");
+                return;
+            }
+
+            let urlList = $(urls).val().trim().split("\n");
+            let remote = $("#remote").val().trim();
+            let folder = $("#folder").val().trim();
+
+            let idList = []
+            for (let i = 0; i < urlList.length; i++) {
+                let id = parseId(urlList[i]);
+                idList.push(id);
+            }
+
+
+            let cmdList = []
+            for (let j = 0; j < idList.length; j++) {
+                let id = idList[j]
+                cmd = `gclone copy --drive-server-side-across-configs --bwlimit=1b -v -P "${remote}${id}" "${remote}/${folder}" `;
+                cmdList.push(cmd)
+            }
+
+
+            $("#output-cmds").val(cmdList.join("\n"))
+        }
+
+        $("#input-urls").bind('input propertychange', convert)
+
+        convert();
+    });
+</script>
+
+<body>
+    <div class="pure-g">
+        <div class="pure-u-1-1">
+
+            <form class="pure-form">
+                <legend>Drive URLs to GClone</legend>
+
+                <div class="pure-g">
+                    <div class="pure-u-1 pure-u-md-1-3">
+                        <input id="remote" class="pure-input-1-3" type="text" value="pending-sa:">
+
+                        <input id="folder" class="pure-input-2-3" type="text" value="downloads">
+                    </div>
+                </div>
+
+                <fieldset class="pure-group">
+                    <textarea id="input-urls" class="pure-input-1" rows="5" placeholder="Google Drive URLs"></textarea>
+                </fieldset>
+                <fieldset class="pure-group">
+                    <textarea id="output-cmds" class="pure-input-1" rows="5" placeholder=""></textarea>
+                </fieldset>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+</body>
+
+</html>
