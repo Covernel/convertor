@@ -16,15 +16,15 @@
             let result = [];
 
             // folders - https://drive.google.com/drive/u/0/folders/
-			// file - https://drive.google.com/file/d/
-            reg = /\/(folders|files|file\/d)\/([^\/]+)\/?/;
+            // file - https://drive.google.com/file/d/
+            reg = /\/(folders|files|file\/d)\/([A-Za-z0-9_-]+)\/?/;
             result = url.match(reg);
             if (result && result.length > 2) {
                 id = result[2];
             }
 
             // id - https://drive.google.com/open?id=
-            reg = /.+id=(.+)[^0-9A-Za-z_]?/;
+            reg = /.+id=(.+)[^0-9A-Za-z_-]?/;
             result = url.match(reg);
             console.log(result);
             if (result && result.length > 1) {
