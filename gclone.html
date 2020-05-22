@@ -56,7 +56,7 @@
             let cmdList = []
             for (let j = 0; j < idList.length; j++) {
                 let id = idList[j]
-                cmd = `gclone copy --drive-server-side-across-configs --bwlimit=1b -v -P "${remote}{${id}}" "${remote}/${folder}" `;
+                cmd = `gclone copy --drive-server-side-across-configs --drive-pacer-min-sleep=5ms --drive-pacer-burst=50000 --bwlimit=1b -v -P "${remote}{${id}}" "${remote}/${folder}" `;
                 cmdList.push(cmd)
             }
 
